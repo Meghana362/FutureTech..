@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StyleSense AI — Your Personal Fashion Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- Animated Background -->
+<div class="bg-mesh">
+  <div class="mesh-orb orb-1"></div>
+  <div class="mesh-orb orb-2"></div>
+  <div class="mesh-orb orb-3"></div>
+</div>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="brand-icon">✦</span>
+    <span class="brand-name">StyleSense</span>
+    <span class="brand-tag">AI</span>
+  </div>
+  <div class="nav-links">
+    <a href="#" class="nav-link active" data-section="dashboard">Home</a>
+    <a href="#" class="nav-link" data-section="profile">Profile</a>
+    <a href="#" class="nav-link" data-section="wardrobe">Wardrobe</a>
+    <a href="#" class="nav-link" data-section="trends">Trends</a>
+    <a href="#" class="nav-link" data-section="lookbook">Lookbook</a>
+  </div>
+  <div class="nav-actions">
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
+      <span id="theme-icon">☀️</span>
+    </button>
+    <div class="style-score-badge" id="score-badge">
+      <span class="score-num" id="nav-score">0</span>
+      <span class="score-label">Style Score</span>
+    </div>
+  </div>
+</nav>
+
+<!-- Main App -->
+<main class="app-container">
+
+  <!-- DASHBOARD SECTION -->
+  <section class="section active" id="section-dashboard">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Generative AI Fashion Intelligence</p>
+        <h1 class="hero-title">Dress <em>Smarter</em>,<br>Not Harder</h1>
+        <p class="hero-sub">AI-powered outfit curation, trend analysis, and personal styling — all in one place.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" onclick="switchSection('profile')">Build Your Style Profile</button>
+          <button class="btn-ghost" onclick="openChat()">Chat with Stylist</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-num">14+</span><span class="stat-label">AI Features</span></div>
+          <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Outfit Ideas</span></div>
+          <div class="stat"><span class="stat-num">24/7</span><span class="stat-label">AI Stylist</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Tip -->
+    <div class="daily-tip-card" id="daily-tip">
+      <div class="tip-icon">💡</div>
+      <div class="tip-content">
+        <div class="tip-label">Daily Style Tip</div>
+        <div class="tip-text" id="tip-text">Loading your daily fashion tip...</div>
+      </div>
+      <button class="tip-refresh" onclick="loadDailyTip()">↻</button>
+    </div>
+
+    <!-- Feature Grid -->
+    <div class="features-grid">
+      <div class="feature-card feature-main" onclick="switchSection('profile')">
+        <div class="feature-icon">👤</div>
+        <div class="feature-content">
+          <h3>Style Profile</h3>
+          <p>Set your preferences for hyper-personalized AI recommendations</p>
+        </div>
+        <div class="feature-arrow">→</div>
+      </div>
+      <div class="feature-card" onclick="showOccasionSuggestion()">
+        <div class="feature-icon">🎉</div>
+        <h3>Occasion Outfits</h3>
+        <p>Party, Office, Wedding & more</p>
+      </div>
+      <div class="feature-card" onclick="showWeatherFashion()">
+        <div class="feature-icon">🌦️</div>
+        <h3>Weather Fashion</h3>
+        <p>Dress for the weather, live in comfort</p>
+      </div>
+      <div class="feature-card" onclick="showImageAnalysis()">
+        <div class="feature-icon">📷</div>
+        <h3>Image Analysis</h3>
+        <p>Upload & get instant AI style feedback</p>
+      </div>
+      <div class="feature-card" onclick="showColorMatch()">
+        <div class="feature-icon">🎨</div>
+        <h3>Color Match</h3>
+        <p>Perfect color combinations every time</p>
+      </div>
+      <div class="feature-card" onclick="switchSection('wardrobe')">
+        <div class="feature-icon">👚</div>
+        <h3>Wardrobe AI</h3>
+        <p>Smart outfit combos from your clothes</p>
+      </div>
+    </div>
+
+    <!-- Occasion Outfits Panel -->
+    <div class="panel" id="panel-occasion" style="display:none">
+      <div class="panel-header">
+        <h2>🎉 Occasion-Based Outfit Suggestion</h2>
+        <button class="panel-close" onclick="closePanel('panel-occasion')">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Select Occasion</label>
+            <div class="occasion-chips" id="occasion-chips">
+              <button class="chip active" onclick="selectChip(this, 'occasion')">Party 🎉</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Office 💼</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Wedding 💍</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">College 🎓</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Gym 💪</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Casual 😎</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Date Night 💕</button>
+              <button class="chip" onclick="selectChip(this, 'occasion')">Festival 🎭</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Gender</label>
+            <select id="occ-gender" class="form-select">
+              <option value="unisex">Unisex</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="non-binary">Non-binary</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Season</label>
+            <select id="occ-season" class="form-select">
+              <option value="any">Any Season</option>
+              <option value="summer">Summer</option>
+              <option value="winter">Winter</option>
+              <option value="spring">Spring</option>
+              <option value="monsoon">Monsoon</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="getOccasionOutfit()">
+          <span>Generate Outfit</span>
+          <span class="btn-loader" id="occ-loader" style="display:none">⟳</span>
+        </button>
+        <div class="result-card" id="occ-result" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Weather Fashion Panel -->
+    <div class="panel" id="panel-weather" style="display:none">
+      <div class="panel-header">
+        <h2>🌦️ Weather-Based Fashion</h2>
+        <button class="panel-close" onclick="closePanel('panel-weather')">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>City Name</label>
+            <input type="text" id="weather-city" placeholder="e.g. Mumbai, Delhi, London" class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Occasion</label>
+            <select id="weather-occasion" class="form-select">
+              <option>Casual</option><option>Office</option><option>Party</option><option>Outdoor</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="getWeatherFashion()">Get Weather Fashion</button>
+        <div class="weather-widget" id="weather-display" style="display:none">
+          <div class="weather-info">
+            <div class="weather-temp" id="w-temp">--°C</div>
+            <div class="weather-condition" id="w-condition">--</div>
+            <div class="weather-city-name" id="w-city">--</div>
+          </div>
+        </div>
+        <div class="result-card" id="weather-result" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Image Analysis Panel -->
+    <div class="panel" id="panel-image" style="display:none">
+      <div class="panel-header">
+        <h2>📷 AI Outfit Image Analysis</h2>
+        <button class="panel-close" onclick="closePanel('panel-image')">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('image-input').click()">
+          <div class="upload-icon">📁</div>
+          <p>Click to upload or drag & drop</p>
+          <span>Supports JPG, PNG, WEBP</span>
+          <input type="file" id="image-input" accept="image/*" style="display:none" onchange="previewImage(event)">
+        </div>
+        <div id="image-preview" style="display:none">
+          <img id="preview-img" src="" alt="Preview" class="preview-image">
+        </div>
+        <button class="btn-primary" onclick="analyzeImage()">Analyze with AI</button>
+        <div class="result-card" id="image-result" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Color Match Panel -->
+    <div class="panel" id="panel-color" style="display:none">
+      <div class="panel-header">
+        <h2>🎨 Smart Color Matching</h2>
+        <button class="panel-close" onclick="closePanel('panel-color')">✕</button>
+      </div>
+      <div class="panel-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Your Base Color</label>
+            <div class="color-picker-row">
+              <input type="color" id="color-picker" value="#1a1a2e" class="color-picker-input">
+              <input type="text" id="color-name" placeholder="e.g. Navy Blue, Burgundy" class="form-input">
+            </div>
+          </div>
+        </div>
+        <div class="color-presets">
+          <span class="preset-label">Quick pick:</span>
+          <button class="color-preset" style="background:#1B3A6B" onclick="setColor('Navy Blue')">Navy</button>
+          <button class="color-preset" style="background:#1a1a1a" onclick="setColor('Black')">Black</button>
+          <button class="color-preset" style="background:#ffffff; border: 1px solid #ccc" onclick="setColor('White')">White</button>
+          <button class="color-preset" style="background:#722F37" onclick="setColor('Burgundy')">Burgndy</button>
+          <button class="color-preset" style="background:#4A7C59" onclick="setColor('Olive Green')">Olive</button>
+          <button class="color-preset" style="background:#C8A951" onclick="setColor('Mustard Yellow')">Mustard</button>
+        </div>
+        <button class="btn-primary" onclick="getColorMatch()">Find Color Matches</button>
+        <div class="result-card" id="color-result" style="display:none"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFILE SECTION -->
+  <section class="section" id="section-profile">
+    <div class="section-header">
+      <h2>👤 Your Style Profile</h2>
+      <p>Help AI understand your unique style for better recommendations</p>
+    </div>
+    <div class="profile-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="p-name" placeholder="Enter your name" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" id="p-age" placeholder="Age" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="toggle-group" id="gender-group">
+            <button class="toggle-btn active" onclick="selectToggle(this, 'gender-group')">Male</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'gender-group')">Female</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'gender-group')">Non-Binary</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Body Type</label>
+          <div class="toggle-group" id="body-group">
+            <button class="toggle-btn active" onclick="selectToggle(this, 'body-group')">Slim</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'body-group')">Athletic</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'body-group')">Average</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'body-group')">Plus Size</button>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Preferred Style</label>
+          <div class="style-selector" id="style-group">
+            <button class="style-btn active" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">😎</span>Casual
+            </button>
+            <button class="style-btn" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">💼</span>Formal
+            </button>
+            <button class="style-btn" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">🔥</span>Streetwear
+            </button>
+            <button class="style-btn" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">🎨</span>Bohemian
+            </button>
+            <button class="style-btn" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">🪷</span>Ethnic
+            </button>
+            <button class="style-btn" onclick="selectToggle(this, 'style-group')">
+              <span class="style-icon">✨</span>Minimalist
+            </button>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Favorite Colors</label>
+          <div class="color-checkbox-grid" id="fav-colors">
+            <label class="color-check"><input type="checkbox" value="Black"><span class="swatch" style="background:#1a1a1a"></span>Black</label>
+            <label class="color-check"><input type="checkbox" value="White"><span class="swatch" style="background:#f5f5f5;border:1px solid #ddd"></span>White</label>
+            <label class="color-check"><input type="checkbox" value="Navy"><span class="swatch" style="background:#1B3A6B"></span>Navy</label>
+            <label class="color-check"><input type="checkbox" value="Grey"><span class="swatch" style="background:#888"></span>Grey</label>
+            <label class="color-check"><input type="checkbox" value="Beige"><span class="swatch" style="background:#D4B896"></span>Beige</label>
+            <label class="color-check"><input type="checkbox" value="Burgundy"><span class="swatch" style="background:#722F37"></span>Burgundy</label>
+            <label class="color-check"><input type="checkbox" value="Olive"><span class="swatch" style="background:#4A7C59"></span>Olive</label>
+            <label class="color-check"><input type="checkbox" value="Mustard"><span class="swatch" style="background:#C8A951"></span>Mustard</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Monthly Budget for Fashion</label>
+          <div class="toggle-group" id="budget-group">
+            <button class="toggle-btn active" onclick="selectToggle(this, 'budget-group')">₹500-2000</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'budget-group')">₹2000-5000</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'budget-group')">₹5000-15000</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'budget-group')">₹15000+</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Skin Tone</label>
+          <div class="toggle-group" id="skin-group">
+            <button class="toggle-btn active" onclick="selectToggle(this, 'skin-group')">Fair</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'skin-group')">Medium</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'skin-group')">Olive</button>
+            <button class="toggle-btn" onclick="selectToggle(this, 'skin-group')">Dark</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-primary" onclick="saveProfile()">Save Style Profile ✦</button>
+        <button class="btn-ghost" onclick="loadProfile()">Load Saved Profile</button>
+      </div>
+      <div class="save-confirm" id="profile-confirm" style="display:none">
+        ✅ Profile saved! AI recommendations are now personalized for you.
+      </div>
+    </div>
+
+    <!-- Style Score Card -->
+    <div class="score-card" id="score-card">
+      <div class="score-header">🏆 Your Style Score</div>
+      <div class="score-circle">
+        <div class="score-inner">
+          <div class="score-number" id="score-display">0</div>
+          <div class="score-max">/100</div>
+        </div>
+      </div>
+      <div class="score-level" id="score-level">Fashion Novice 🌱</div>
+      <div class="score-breakdown" id="score-breakdown"></div>
+    </div>
+
+    <!-- Gamification -->
+    <div class="gamification-card">
+      <h3>🎮 Fashion Challenges</h3>
+      <div class="challenge-list">
+        <div class="challenge-item completed"><span>✅</span> Complete your style profile</div>
+        <div class="challenge-item" id="challenge-wardrobe"><span>⬜</span> Add 5 items to your wardrobe</div>
+        <div class="challenge-item" id="challenge-outfit"><span>⬜</span> Save your first outfit</div>
+        <div class="challenge-item" id="challenge-chat"><span>⬜</span> Chat with AI stylist</div>
+        <div class="challenge-item"><span>⬜</span> Get a weekly lookbook</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WARDROBE SECTION -->
+  <section class="section" id="section-wardrobe">
+    <div class="section-header">
+      <h2>👚 Smart Wardrobe Manager</h2>
+      <p>Organize your clothes and let AI create outfit combinations</p>
+    </div>
+    <div class="wardrobe-layout">
+      <div class="wardrobe-add">
+        <h3>Add Clothing Item</h3>
+        <div class="form-group">
+          <label>Item Name</label>
+          <input type="text" id="item-name" placeholder="e.g. Blue Slim Jeans" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select id="item-cat" class="form-select">
+            <option>Tops</option><option>Bottoms</option><option>Outerwear</option>
+            <option>Shoes</option><option>Accessories</option><option>Ethnic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Color</label>
+          <input type="text" id="item-color" placeholder="e.g. Navy Blue" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Brand (optional)</label>
+          <input type="text" id="item-brand" placeholder="e.g. Zara, H&M" class="form-input">
+        </div>
+        <div class="form-group">
+          <label>Best for</label>
+          <select id="item-occasion" class="form-select">
+            <option>Casual</option><option>Office</option><option>Party</option><option>All Occasions</option>
+          </select>
+        </div>
+        <button class="btn-primary" onclick="addToWardrobe()">Add to Wardrobe</button>
+      </div>
+      <div class="wardrobe-display">
+        <div class="wardrobe-header">
+          <h3>My Wardrobe <span id="item-count" class="count-badge">0 items</span></h3>
+          <button class="btn-ghost small" onclick="loadWardrobe()">↻ Refresh</button>
+        </div>
+        <div class="wardrobe-grid" id="wardrobe-grid">
+          <div class="empty-state">Add your first item to get started! 👗</div>
+        </div>
+        <div class="wardrobe-suggest-area">
+          <label>Get combinations for:</label>
+          <select id="wardrobe-occasion" class="form-select">
+            <option>Casual</option><option>Office</option><option>Party</option><option>Any Occasion</option>
+          </select>
+          <button class="btn-primary" onclick="getWardrobeSuggestions()">✨ AI Outfit Suggestions</button>
+          <div class="result-card" id="wardrobe-result" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDS SECTION -->
+  <section class="section" id="section-trends">
+    <div class="section-header">
+      <h2>📊 Fashion Trend Analyzer</h2>
+      <p>Stay ahead with AI-powered trend insights</p>
+    </div>
+    <div class="trends-controls">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Season</label>
+          <select id="trend-season" class="form-select">
+            <option value="current">Current</option>
+            <option value="spring-summer">Spring/Summer</option>
+            <option value="fall-winter">Fall/Winter</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Style</label>
+          <select id="trend-style" class="form-select">
+            <option value="general">All Styles</option>
+            <option value="streetwear">Streetwear</option>
+            <option value="formal">Formal</option>
+            <option value="ethnic">Ethnic/Traditional</option>
+            <option value="sustainable">Sustainable Fashion</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>For</label>
+          <select id="trend-gender" class="form-select">
+            <option value="unisex">Everyone</option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="getTrends()">🔍 Analyze Trends</button>
+    </div>
+    <div class="result-card" id="trends-result" style="display:none"></div>
+  </section>
+
+  <!-- LOOKBOOK SECTION -->
+  <section class="section" id="section-lookbook">
+    <div class="section-header">
+      <h2>📚 AI Generated Lookbook</h2>
+      <p>Your personalized weekly style guide</p>
+    </div>
+    <div class="lookbook-controls">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Lookbook Theme</label>
+          <select id="lb-theme" class="form-select">
+            <option value="weekly">Weekly Essentials</option>
+            <option value="minimalist">Minimalist</option>
+            <option value="streetwear">Streetwear Edit</option>
+            <option value="office">Office Style</option>
+            <option value="vacation">Vacation Vibes</option>
+            <option value="festive">Festive Season</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Style Direction</label>
+          <select id="lb-style" class="form-select">
+            <option value="mixed">Mixed</option>
+            <option value="casual">Casual</option>
+            <option value="formal">Formal</option>
+            <option value="trendy">Trendy</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="generateLookbook()">📖 Generate Lookbook</button>
+    </div>
+    <div class="result-card" id="lookbook-result" style="display:none"></div>
+
+    <!-- Saved Outfits -->
+    <div class="saved-section">
+      <h3>💾 Saved Outfits</h3>
+      <div class="saved-grid" id="saved-outfits-grid">
+        <div class="empty-state">No saved outfits yet. Generate some outfits and save your favorites!</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CHATBOT -->
+<div class="chatbot-container" id="chatbot" style="display:none">
+  <div class="chat-header">
+    <div class="chat-bot-avatar">✦</div>
+    <div class="chat-bot-info">
+      <span class="chat-bot-name">StyleSense AI</span>
+      <span class="chat-bot-status">● Online</span>
+    </div>
+    <button class="chat-close" onclick="closeChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="chat-msg bot">
+      <div class="msg-content">
+        <p>Hey! I'm your personal AI Fashion Stylist ✦</p>
+        <p>Ask me anything about outfits, colors, trends, or what to wear for any occasion!</p>
+        <div class="quick-replies">
+          <button onclick="quickReply('What should I wear for a job interview?')">Job interview outfit</button>
+          <button onclick="quickReply('Best colors for summer?')">Summer colors</button>
+          <button onclick="quickReply('How to dress for a date night?')">Date night</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Ask your AI stylist..." class="chat-input"
+      onkeypress="if(event.key==='Enter') sendChat()">
+    <button class="chat-send" onclick="sendChat()">↑</button>
+  </div>
+</div>
+
+<button class="chat-fab" onclick="openChat()" id="chat-fab">
+  <span>✦</span>
+  <span class="fab-label">AI Stylist</span>
+</button>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
